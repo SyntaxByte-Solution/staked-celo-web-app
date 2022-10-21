@@ -15,7 +15,7 @@ const Connect = () => {
           <TokenIcon token="stCELO" quality={100} width={136} height={136} />
         </div>
         <div className="p-[32px] sm:bg-secondary">
-          <h1 className="text-[27px] leading-[40px] font-medium mb-[16px]">Introducing stCELO</h1>
+          <h1 className="text-[27px] leading-[40px] font-medium mb-[16px]">Introducing stTCORE</h1>
           <ul className="text-[18px] leading-[28px] mb-[32px]">
             <li className="mb-[4px]">
               Earn a projected {annualProjectedRate ? annualProjectedRate : '-'}% APR
@@ -31,7 +31,7 @@ const Connect = () => {
             `}
             onClick={connectWallet}
           >
-            Connect Wallet
+            Connect
           </Button>
         </div>
       </div>
