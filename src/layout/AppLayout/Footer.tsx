@@ -12,7 +12,7 @@ export const Footer = () => {
     <footer className={`w-full ${footerFlexClasses} p-base sm:h-[180px] bg-secondary`}>
       <div className="flex flex-col sm:h-[100%] justify-between items-start mb-[16px] sm:mb-0">
         <div className="flex flex-col sm:mb-0 mb-[32px]">
-          <Label classes="mb-[4px]">Total CELO staked</Label>
+          <Label classes="mb-[4px]">Total TCORE staked</Label>
           <span className="text-[27px] leading-[40px]">{totalCeloBalance.displayAsBase()}</span>
         </div>
         <FAQLinks classes="mb-[64px] sm:hidden" />
@@ -24,7 +24,7 @@ export const Footer = () => {
       </div>
       <div className="sm:h-[100%] text-[16px] leading-[24px] font-normal sm:text-right">
         <FAQLinks classes="hidden sm:flex flex-row justify-end mb-[24px]" />
-        Open source Apache 2 <br /> © 2022 cLabs, Inc.
+        Stack Source <br /> © 2022 Stackhubs, MIT.
       </div>
     </footer>
   );
@@ -42,12 +42,12 @@ const FAQLinks = ({ classes }: FAQLinksProps) => {
         <Link href="/faq">FAQ</Link>
       </div>
       <div className={linkPositionClasses}>
-        <a href={docsUrl} target="_blank" rel="noreferrer">
+        <a href="/" target="_blank" rel="noreferrer">
           Docs
         </a>
       </div>
       <div className={linkPositionClasses}>
-        <a href={privacyUrl} target="_blank" rel="noreferrer">
+        <a href="/" target="_blank" rel="noreferrer">
           Privacy
         </a>
       </div>
