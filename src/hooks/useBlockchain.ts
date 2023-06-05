@@ -1,13 +1,13 @@
 import { ContractKit, newKit } from '@celo/contractkit';
 import { useCelo } from '@celo/react-celo';
+import { COMPLIANT_ERROR_RESPONSE } from 'compliance-sdk';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import AccountABI from 'src/blockchain/ABIs/Account.json';
 import ManagerABI from 'src/blockchain/ABIs/Manager.json';
 import StCeloABI from 'src/blockchain/ABIs/StakedCelo.json';
-import { GAS_PRICE } from 'src/config/consts';
 import { mainnetAddresses, testnetAddresses } from 'src/config/contracts';
-import { AbiItem } from 'web3-utils';
 import { isSanctionedAddress } from 'src/utils/sanctioned';
+import { AbiItem } from 'web3-utils';
 
 interface TxOptions {
   from: string;
@@ -21,6 +21,7 @@ export interface TxCallbacks {
 type EpochRewardsContract = Awaited<ReturnType<ContractKit['_web3Contracts']['getEpochRewards']>>;
 type SortedOraclesContract = Awaited<ReturnType<ContractKit['contracts']['getSortedOracles']>>;
 type StableTokenContract = Awaited<ReturnType<ContractKit['contracts']['getStableToken']>>;
+type GasPriceMinimumContract = Awaited<ReturnType<ContractKit['contracts']['getGasPriceMinimum']>>;
 
 export function useBlockchain() {
   const { kit, network } = useCelo();
@@ -60,12 +61,11 @@ export function useBlockchain() {
 
   const sendTransaction = useCallback(
     async (txObject: any, txOptions: TxOptions, callbacks?: TxCallbacks) => {
-      if (isSanctionedAddress(txOptions.from)) {
-        throw new Error('Cannot transact from an OFAC sanctioned address');
+      if (await isSanctionedAddress(txOptions.from)) {
+        throw new Error(COMPLIANT_ERROR_RESPONSE);
       }
       const tx = await kit.connection.sendTransactionObject(txObject, {
         ...txOptions,
-        gasPrice: GAS_PRICE,
       });
       await tx.getHash();
       if (callbacks?.onSent) callbacks.onSent();
@@ -91,11 +91,17 @@ export function useBlockchain() {
     () => void contractKit.contracts.getStableToken().then(setStableTokenContract),
     [contractKit]
   );
+  const [gasPriceMinimumContract, setGasPriceMinimumContract] = useState<GasPriceMinimumContract>();
+  useEffect(
+    () => void contractKit.contracts.getGasPriceMinimum().then(setGasPriceMinimumContract),
+    [contractKit]
+  );
 
   return {
     epochRewardsContract,
     sortedOraclesContract,
     stableTokenContract,
+    gasPriceMinimumContract,
     managerContract,
     stCeloContract,
     accountContract,
